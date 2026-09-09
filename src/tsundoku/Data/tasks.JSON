@@ -1,0 +1,13 @@
+{
+    "tasks": [
+        {
+            "id": "...",
+            "title": "Study physics",
+            "description": "Prepare for physics test",
+            "deadline": "2026-09-17T18:00:00",
+            "duration_minutes": 120,
+            "priority": "high",
+            "completed": false
+        }
+    ]
+}
