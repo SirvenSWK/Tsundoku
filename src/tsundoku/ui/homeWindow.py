@@ -1,12 +1,12 @@
-from email.mime import text
 import tsundoku.models.tasks as tasks
+from tsundoku.tools import taskManager
 import PySide6.QtWidgets as QtWidget
 from uuid import uuid4
 
 class HomePage(QtWidget.QWidget):
     def __init__(self):
         super().__init__()
-
+        self.taskManager = taskManager.TaskManager()
         self.inputBox = QtWidget.QPlainTextEdit()
         self.inputBox.setPlaceholderText(
             "Hello user, tell me what's up?"
@@ -40,4 +40,5 @@ class HomePage(QtWidget.QWidget):
             completed=False
         )
 
-        self.taskManager.add_task(task)
+        self.taskManager.addTask(task)
+        self.listOfTasks.addItem(task.title)
