@@ -1,13 +1,23 @@
 {
+    "version": 1,
+    "ingestions": [
+        {
+            "id": "c5dd7c36-845b-4343-a32d-40d57b158e8b",
+            "rawText": "Hello World",
+            "timeStamp": "2026-09-13T21:47:44.919999+02:00"
+        }
+    ],
     "tasks": [
         {
-            "id": "...",
-            "title": "Study physics",
-            "description": "Prepare for physics test",
-            "deadline": "2026-09-17T18:00:00",
-            "duration_minutes": 120,
-            "priority": "high",
-            "completed": false
+            "id": "aaabd3e1-280a-44c2-9110-b8694043309f",
+            "title": "Hello World",
+            "description": "",
+            "deadline": null,
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "c5dd7c36-845b-4343-a32d-40d57b158e8b",
+            "parentID": null
         }
     ]
 }

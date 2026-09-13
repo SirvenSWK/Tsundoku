@@ -1,2 +1,5 @@
+from tsundoku.main import runApp
+
+
 def main() -> None:
-    print("Hello from tsundoku!")
+    runApp()

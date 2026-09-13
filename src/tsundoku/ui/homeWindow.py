@@ -1,12 +1,12 @@
-import tsundoku.models.tasks as tasks
-from tsundoku.tools import taskManager
+from tsundoku.tools import organizer, taskManager
 import PySide6.QtWidgets as QtWidget
-from uuid import uuid4
+
 
 class HomePage(QtWidget.QWidget):
     def __init__(self):
         super().__init__()
         self.taskManager = taskManager.TaskManager()
+        self.taskManager.load()
         self.inputBox = QtWidget.QPlainTextEdit()
         self.inputBox.setPlaceholderText(
             "Hello user, tell me what's up?"
@@ -23,6 +23,13 @@ class HomePage(QtWidget.QWidget):
         layout.addWidget(self.listOfTasks)
 
         self.setLayout(layout)
+        self.refreshTaskList()
+
+    def refreshTaskList(self) -> None:
+        self.listOfTasks.clear()
+        for task in self.taskManager.getTasks():
+            prefix = "  ↳ " if task.parentID else ""
+            self.listOfTasks.addItem(f"{prefix}{task.title}")
 
     def organize(self):
         text = self.inputBox.toPlainText().strip()
@@ -30,15 +37,12 @@ class HomePage(QtWidget.QWidget):
         if not text:
             return
 
-        task = tasks.Task(
-            id=uuid4(),
-            title=text,
-            description="",
-            deadline=None,
-            duration=None,
-            priority="normal",
-            completed=False
-        )
+        result = organizer.organizeWithLlm(text)
+        ingestion, newTasks = organizer.applyOrganizeResult(result, text)
+        self.taskManager.addIngestion(ingestion)
+        for task in newTasks:
+            self.taskManager.addTask(task)
 
-        self.taskManager.addTask(task)
-        self.listOfTasks.addItem(task.title)
+        self.taskManager.save()
+        self.refreshTaskList()
+        self.inputBox.clear()
