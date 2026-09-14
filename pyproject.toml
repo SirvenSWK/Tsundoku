@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "google-api-python-client>=2.200.0",
     "google-auth-oauthlib>=1.4.1",
+    "groq>=1.7.0",
     "pydantic>=2.13.5",
     "pyside6>=6.11.2",
     "python-dotenv>=1.2.3",

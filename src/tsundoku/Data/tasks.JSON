@@ -2,21 +2,91 @@
     "version": 1,
     "ingestions": [
         {
-            "id": "c5dd7c36-845b-4343-a32d-40d57b158e8b",
-            "rawText": "Hello World",
-            "timeStamp": "2026-09-13T21:47:44.919999+02:00"
+            "id": "51f03bb9-cc86-4c83-95ef-518a4d45b1c2",
+            "rawText": "Finish my math homework and prepare for biology.",
+            "timeStamp": "2026-09-14T13:59:33.136406Z"
+        },
+        {
+            "id": "e8abcee6-073b-4c00-90be-7484ccb68b2b",
+            "rawText": "hello world i have a test toomorow at 8 pm",
+            "timeStamp": "2026-09-14T16:33:45.227662+02:00"
+        },
+        {
+            "id": "f5c6368a-1763-4293-a7c8-81253b0ccbc1",
+            "rawText": "Hello i need to make a study session for a test on a wednesday morning this week the test is about Math - logarythmic function and it will propably take me a while to understand",
+            "timeStamp": "2026-09-14T17:18:29.416124+02:00"
+        },
+        {
+            "id": "bf36d28c-de65-411d-ba74-bb1443e59c2f",
+            "rawText": "hello i need to learn how to cook pasta this week",
+            "timeStamp": "2026-09-14T17:18:51.425071+02:00"
         }
     ],
     "tasks": [
         {
-            "id": "aaabd3e1-280a-44c2-9110-b8694043309f",
-            "title": "Hello World",
+            "id": "d55c4fdd-cd04-4346-992f-3260f731afef",
+            "title": "Prepare for school",
+            "description": "Complete the school preparation tasks.",
+            "deadline": null,
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "51f03bb9-cc86-4c83-95ef-518a4d45b1c2",
+            "parentID": null
+        },
+        {
+            "id": "dfaee54a-5050-49d3-ba2e-70a875f5dc38",
+            "title": "Finish math homework",
+            "description": "Complete the assigned exercises.",
+            "deadline": null,
+            "durationMinutes": 90,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "51f03bb9-cc86-4c83-95ef-518a4d45b1c2",
+            "parentID": "d55c4fdd-cd04-4346-992f-3260f731afef"
+        },
+        {
+            "id": "6f76b845-6f4c-41a3-8af4-d8c2a17be1de",
+            "title": "Prepare for biology",
+            "description": "Review the upcoming biology material.",
+            "deadline": null,
+            "durationMinutes": 45,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "51f03bb9-cc86-4c83-95ef-518a4d45b1c2",
+            "parentID": "d55c4fdd-cd04-4346-992f-3260f731afef"
+        },
+        {
+            "id": "4be75d18-57b7-4281-a890-35ae479d3c6e",
+            "title": "hello world i have a test toomorow at 8 pm",
             "description": "",
             "deadline": null,
             "durationMinutes": null,
             "priority": "normal",
             "completed": false,
-            "ingestionID": "c5dd7c36-845b-4343-a32d-40d57b158e8b",
+            "ingestionID": "e8abcee6-073b-4c00-90be-7484ccb68b2b",
+            "parentID": null
+        },
+        {
+            "id": "e90a4184-fba3-4839-82ee-46b890ae8bda",
+            "title": "Study session: Math - logarithmic functions",
+            "description": "Prepare for the upcoming test on logarithmic functions, focusing on understanding concepts and solving problems.",
+            "deadline": "2026-09-16T09:00:00+02:00",
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "f5c6368a-1763-4293-a7c8-81253b0ccbc1",
+            "parentID": null
+        },
+        {
+            "id": "8fe68bd2-9852-4b43-aebe-271a6f4a3836",
+            "title": "Learn to cook pasta",
+            "description": "Watch a tutorial and practice cooking pasta",
+            "deadline": "2026-09-18T23:59:00+02:00",
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "bf36d28c-de65-411d-ba74-bb1443e59c2f",
             "parentID": null
         }
     ]

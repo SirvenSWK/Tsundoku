@@ -27,10 +27,19 @@ class HomePage(QtWidget.QWidget):
 
     def refreshTaskList(self) -> None:
         self.listOfTasks.clear()
-        for task in self.taskManager.getTasks():
-            prefix = "  ↳ " if task.parentID else ""
-            self.listOfTasks.addItem(f"{prefix}{task.title}")
 
+        for task in self.taskManager.getTasks():
+            prefix = " ↳ " if task.parentID else ""
+
+            durationText = ""
+            if task.duration is not None:
+                minutes = int(task.duration.total_seconds() // 60)
+                durationText = f" · {minutes} min"
+        priorityText = f" · {task.priority}"
+
+        self.listOfTasks.addItem(
+            f"{prefix}{task.title}{durationText}{priorityText}"
+        )
     def organize(self):
         text = self.inputBox.toPlainText().strip()
 

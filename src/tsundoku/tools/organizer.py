@@ -1,10 +1,3 @@
-"""
-Turn one natural-language dump into structured tasks (LLM-backed later).
-
-Flow:
-  raw text → OrganizeResult (Pydantic) → Task + Ingestion rows in TaskManager
-"""
-
 from __future__ import annotations
 
 import os
@@ -14,6 +7,14 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 from tsundoku.models.tasks import Ingestion, Task
+
+from dotenv import load_dotenv
+
+import json
+
+currentDateTime = datetime.now().astimezone()
+load_dotenv()
+apiKey = os.getenv("GROQ_API_KEY")
 
 
 class TaskDraft(BaseModel):
@@ -34,18 +35,28 @@ class OrganizeResult(BaseModel):
     tasks: list[TaskDraft] = Field(min_length=1)
 
 
-organizeSystem = """You extract actionable tasks from the user's message.
-Return JSON matching the schema. Rules:
-- One user message may yield several tasks (comma lists, 'and', multiple deadlines).
-- Use parentRef on session rows when breaking study/prep into chunks; parent row has parentRef null.
+systemPrompt = f"""You extract actionable tasks from the user's message.
+
+Current date and time: {currentDateTime.isoformat()}
+
+Use this date and time as the reference when interpreting relative dates such as:
+- today
+- tomorrow
+- this Friday
+- next Monday
+
+Rules:
+- One user message may yield several tasks.
+- Use parentRef for subtasks/session rows.
 - durationMinutes: realistic focus blocks (e.g. 45–120), null if unknown.
 - priority: low | normal | high
 - deadline: ISO 8601 datetime when implied, else null.
+- If the user gives a relative deadline, resolve it using the current date and time above.
 """
 
 
 def fallbackOrganize(rawText: str) -> OrganizeResult:
-    """No API key: keep UX working until LLM is wired."""
+    apiKey = os.getenv("GROQ_API_KEY")
     return OrganizeResult(
         tasks=[
             TaskDraft(
@@ -57,26 +68,39 @@ def fallbackOrganize(rawText: str) -> OrganizeResult:
 
 
 def organizeWithLlm(rawText: str) -> OrganizeResult:
-    """
-    Call your LLM with structured output when OPENAI_API_KEY is configured.
-    """
-    apiKey = os.getenv("OPENAI_API_KEY")
+
     if not apiKey:
         return fallbackOrganize(rawText)
 
-    # Example shape once `openai` is installed:
-    # from openai import OpenAI
-    # client = OpenAI(apiKey=apiKey)
-    # completion = client.beta.chat.completions.parse(
-    #     model="gpt-4o-mini",
-    #     messages=[
-    #         {"role": "system", "content": organizeSystem},
-    #         {"role": "user", "content": rawText},
-    #     ],
-    #     response_format=OrganizeResult,
-    # )
-    # return completion.choices[0].message.parsed
-    return fallbackOrganize(rawText)
+    from groq import Groq
+
+    client = Groq(api_key = apiKey)
+
+    completion = client.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=[
+            {"role": "system","content": systemPrompt},
+            {"role": "user", "content": rawText},
+        ],
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "organize_result",
+                "schema": OrganizeResult.model_json_schema(),
+            },
+        },
+    )
+
+    content = completion.choices[0].message.content
+
+    if not content:
+        return fallbackOrganize(rawText)
+
+    result = OrganizeResult.model_validate(json.loads(content))
+
+    print("GROQ RESULT:", result)
+
+    return result
 
 
 def applyOrganizeResult(
