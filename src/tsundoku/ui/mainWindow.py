@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Tsundoku")
-        self.resize(900, 600)
+        self.resize(650, 750)
 
         # Navigation between pages
         self.pages = QStackedWidget()

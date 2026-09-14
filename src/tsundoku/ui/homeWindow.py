@@ -11,7 +11,9 @@ class HomePage(QtWidget.QWidget):
         self.inputBox.setPlaceholderText(
             "Hello user, tell me what's up?"
         )
-        self.listOfTasks = QtWidget.QListWidget()
+        self.reviewPanel = QtWidget.QFrame()
+        self.reviewLayout = QtWidget.QVBoxLayout()
+        self.reviewPanel.setLayout(self.reviewLayout)
 
         self.organizeButton = QtWidget.QPushButton("Organize")
 
@@ -20,26 +22,15 @@ class HomePage(QtWidget.QWidget):
         layout = QtWidget.QVBoxLayout()
         layout.addWidget(self.inputBox)
         layout.addWidget(self.organizeButton)
-        layout.addWidget(self.listOfTasks)
+        layout.addWidget(self.reviewPanel)
 
         self.setLayout(layout)
-        self.refreshTaskList()
 
-    def refreshTaskList(self) -> None:
-        self.listOfTasks.clear()
+    def refreshViewPanel(self, message: str = "Nothing organized yet!"):
+        self.clearReviewPanel()
+        self.reviewLayout.addWidget(QtWidget.QLabel(message))
 
-        for task in self.taskManager.getTasks():
-            prefix = " ↳ " if task.parentID else ""
 
-            durationText = ""
-            if task.duration is not None:
-                minutes = int(task.duration.total_seconds() // 60)
-                durationText = f" · {minutes} min"
-        priorityText = f" · {task.priority}"
-
-        self.listOfTasks.addItem(
-            f"{prefix}{task.title}{durationText}{priorityText}"
-        )
     def organize(self):
         text = self.inputBox.toPlainText().strip()
 
@@ -47,11 +38,155 @@ class HomePage(QtWidget.QWidget):
             return
 
         result = organizer.organizeWithLlm(text)
+
+        if not result.tasks:
+            self.refreshViewPanel(
+                result.message
+                or "I couldn't find an actionable task"
+            )
+            return
+        
         ingestion, newTasks = organizer.applyOrganizeResult(result, text)
+
         self.taskManager.addIngestion(ingestion)
+
         for task in newTasks:
             self.taskManager.addTask(task)
 
         self.taskManager.save()
-        self.refreshTaskList()
+        self.displayTasks(newTasks)
         self.inputBox.clear()
+
+    def displayTasks(self, tasks):
+        self.clearReviewPanel()
+
+        if not tasks:
+            self.reviewLayout.addWidget(
+                QtWidget.QLabel(
+                    "I couldn't find an actionable task.\n"
+                    "Tell me what you need to do."
+                )
+            )
+            return
+
+        for task in tasks:
+            taskCard = self.addTaskCard(task)
+            self.reviewLayout.addWidget(taskCard)
+    def clearReviewPanel(self):
+        while self.reviewLayout.count():
+            item = self.reviewLayout.takeAt(0)
+            widget = item.widget()
+
+            if widget is not None:
+                widget.deleteLater()
+    def addTaskCard(self, task):
+        taskCard = QtWidget.QFrame()
+        taskCard.setFrameShape(QtWidget.QFrame.Shape.StyledPanel)
+
+        taskLayout = QtWidget.QVBoxLayout(taskCard)
+
+        titleLabel = QtWidget.QLabel(task.title)
+        titleLabel.setStyleSheet(
+            "Font-size : 16px ; font-weight : bold ;"
+        )
+        priorityLabel = QtWidget.QLabel(
+            f"Priority {task.priority}"
+        )
+        durationText = (
+            str(task.duration)
+            if task.duration is not None
+            else "Not specified"
+        )
+        durationLabel = QtWidget.QLabel(durationText)
+        taskLayout.addWidget(titleLabel)
+
+        if task.description:
+            descriptionLabel = QtWidget.QLabel(task.description)
+            descriptionLabel.setWordWrap(True)
+            taskLayout.addWidget(descriptionLabel)
+
+        taskLayout.addWidget(priorityLabel)
+        taskLayout.addWidget(durationLabel)
+
+        buttonLayout = QtWidget.QHBoxLayout()
+
+        acceptButton = QtWidget.QPushButton("Accept")
+        rejectButton = QtWidget.QPushButton("Reject")
+        addDetailbutton = QtWidget.QPushButton("Add details")
+
+        buttonLayout.addWidget(acceptButton)
+        buttonLayout.addWidget(rejectButton)
+        buttonLayout.addWidget(addDetailbutton)
+
+        taskLayout.addLayout(buttonLayout)
+
+        additionalInfoBox = QtWidget.QPlainTextEdit()
+        additionalInfoBox.setPlaceholderText(
+            "Add details such as the date, topics, location, "
+            "difficulty, or how long this should take..."
+        )
+        additionalInfoBox.setVisible(False)
+
+        reorganizeButton = QtWidget.QPushButton("Reorganize")
+
+        reorganizeButton.setVisible(False)
+
+        taskLayout.addWidget(additionalInfoBox)
+        taskLayout.addWidget(reorganizeButton)
+
+        addDetailbutton.clicked.connect(
+            lambda: self.showAdditionalInfo(
+                additionalInfoBox,
+                reorganizeButton,
+            )
+        )
+        reorganizeButton.clicked.connect(
+            lambda: self.reorganizeTasks(
+                task,
+                additionalInfoBox,
+            )
+        )
+
+        rejectButton.clicked.connect(
+            lambda: self.rejectTask(taskCard, task)
+        )
+        #acceptButton.clicked.connect(
+            #lambda: self.acceptTask(taskCard, task)
+        #)
+        return taskCard
+
+    def showAdditionalInfo(self, infoBox, reorganizeButton):
+        infoBox.setVisible(True)
+        reorganizeButton.setVisible(True)
+        infoBox.setFocus()
+
+    def reorganizeTasks(self, task, infoBox):
+
+        additionalInfo = infoBox.toPlainText().strip()
+
+        if not additionalInfo:
+                return
+
+        combinedText = (
+            f"Original task: {task.title}\n"
+            f"Existing description: {task.description}\n"
+            f"Additional information: {additionalInfo}"
+        )
+
+        result = organizer.organizeWithLlm(combinedText)
+
+        if not result.tasks:
+            self.refreshViewPanel (
+                result.message
+                or "I couldn't create an improved task proposal."
+            )
+            return
+        ingestion, newTasks = organizer.applyOrganizeResult(
+            result,
+            combinedText,
+        )
+        for newTask in newTasks:
+            self.taskManager.addTask(newTask)
+
+        self.taskManager.save()
+        self.displayTasks(newTasks)

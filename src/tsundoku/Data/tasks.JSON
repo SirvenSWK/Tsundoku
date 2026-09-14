@@ -20,6 +20,31 @@
             "id": "bf36d28c-de65-411d-ba74-bb1443e59c2f",
             "rawText": "hello i need to learn how to cook pasta this week",
             "timeStamp": "2026-09-14T17:18:51.425071+02:00"
+        },
+        {
+            "id": "dd2d2b4f-7b20-4c75-9fae-99953541e2b4",
+            "rawText": "Hello i need to bake a cake for my grandma and i need to study maths for a test that is next week on a wednesday i need study session recomendations",
+            "timeStamp": "2026-09-14T19:19:23.941952+02:00"
+        },
+        {
+            "id": "fdfc4866-5b4f-49f3-b78e-d064e7250966",
+            "rawText": "Hello",
+            "timeStamp": "2026-09-14T21:04:44.282106+02:00"
+        },
+        {
+            "id": "f55f314e-7bd1-4a75-80cd-aaa80ad86f95",
+            "rawText": "I want to set a task for a maths test",
+            "timeStamp": "2026-09-14T21:05:09.910375+02:00"
+        },
+        {
+            "id": "5b0b3503-32d9-4235-8f5d-8eeed6daf7df",
+            "rawText": "I have a maths test on trigonometry next week",
+            "timeStamp": "2026-09-14T22:10:17.007665+02:00"
+        },
+        {
+            "id": "95bb5531-5021-4244-a41e-d19d2ea71626",
+            "rawText": "I have a maths test next week on a tuesday i need help scheduling a few study sessions in my timetable",
+            "timeStamp": "2026-09-14T22:21:47.628187+02:00"
         }
     ],
     "tasks": [
@@ -87,6 +112,149 @@
             "priority": "normal",
             "completed": false,
             "ingestionID": "bf36d28c-de65-411d-ba74-bb1443e59c2f",
+            "parentID": null
+        },
+        {
+            "id": "d0030139-054e-42ab-880d-d7b8d1c3b92d",
+            "title": "Bake a cake for grandma",
+            "description": "Prepare and bake a cake for grandma",
+            "deadline": null,
+            "durationMinutes": 120,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "dd2d2b4f-7b20-4c75-9fae-99953541e2b4",
+            "parentID": null
+        },
+        {
+            "id": "1290cd9a-ea1e-44d8-8146-a8dbd85b1d75",
+            "title": "Study maths for test",
+            "description": "Study maths topics for upcoming test on 2026-09-23",
+            "deadline": "2026-09-23T23:59:00+02:00",
+            "durationMinutes": null,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "dd2d2b4f-7b20-4c75-9fae-99953541e2b4",
+            "parentID": null
+        },
+        {
+            "id": "bc7246e8-d922-4a2e-b243-9b4cfa299ef0",
+            "title": "Study session: Algebra review",
+            "description": "Focused 45\u201160 minute session reviewing algebra concepts",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "dd2d2b4f-7b20-4c75-9fae-99953541e2b4",
+            "parentID": "1290cd9a-ea1e-44d8-8146-a8dbd85b1d75"
+        },
+        {
+            "id": "a19547a1-d37c-45b8-b42c-a5ae8b466c13",
+            "title": "Study session: Geometry practice",
+            "description": "Focused 45\u201160 minute session practicing geometry problems",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "dd2d2b4f-7b20-4c75-9fae-99953541e2b4",
+            "parentID": "1290cd9a-ea1e-44d8-8146-a8dbd85b1d75"
+        },
+        {
+            "id": "9a63b2ea-398d-4742-8473-17f6387813c9",
+            "title": "Maths test",
+            "description": "",
+            "deadline": null,
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "f55f314e-7bd1-4a75-80cd-aaa80ad86f95",
+            "parentID": null
+        },
+        {
+            "id": "ca456d7b-9e08-41c2-8205-1c878cd8fe4c",
+            "title": "Study for trigonometry test",
+            "description": "Prepare for maths test on trigonometry scheduled next week.",
+            "deadline": null,
+            "durationMinutes": 120,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "5b0b3503-32d9-4235-8f5d-8eeed6daf7df",
+            "parentID": null
+        },
+        {
+            "id": "d62dc839-819a-4f5d-98bd-e0d9bb743091",
+            "title": "Study for trigonometry test",
+            "description": "Prepare for maths test on trigonometry scheduled next week.",
+            "deadline": "2026-09-20T09:00:00+02:00",
+            "durationMinutes": null,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "a301d88d-5e00-4c85-9ec3-4451d12e96c2",
+            "parentID": null
+        },
+        {
+            "id": "44e0cfdd-689d-493c-a96a-639d84b9e4a9",
+            "title": "Study session 1: Trigonometric identities",
+            "description": "Review key trigonometric identities.",
+            "deadline": "2026-09-16T17:00:00+02:00",
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "a301d88d-5e00-4c85-9ec3-4451d12e96c2",
+            "parentID": "d62dc839-819a-4f5d-98bd-e0d9bb743091"
+        },
+        {
+            "id": "77db77de-dfef-4f76-9202-6d3994763407",
+            "title": "Study session 2: Solving equations",
+            "description": "Practice solving trigonometric equations.",
+            "deadline": "2026-09-17T17:00:00+02:00",
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "a301d88d-5e00-4c85-9ec3-4451d12e96c2",
+            "parentID": "d62dc839-819a-4f5d-98bd-e0d9bb743091"
+        },
+        {
+            "id": "aa0fd08d-3f75-438b-9269-8d1a9c5126d3",
+            "title": "Study session 3: Practice test",
+            "description": "Take a practice test covering all topics.",
+            "deadline": "2026-09-18T17:00:00+02:00",
+            "durationMinutes": 90,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "a301d88d-5e00-4c85-9ec3-4451d12e96c2",
+            "parentID": "d62dc839-819a-4f5d-98bd-e0d9bb743091"
+        },
+        {
+            "id": "7b1fc90f-d8c5-4e8a-b587-14f7f48f0944",
+            "title": "Maths study session 1",
+            "description": "",
+            "deadline": "2026-09-18T18:00:00+02:00",
+            "durationMinutes": 90,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "95bb5531-5021-4244-a41e-d19d2ea71626",
+            "parentID": null
+        },
+        {
+            "id": "4376c4bf-0830-443b-9e99-27f8f254a9a7",
+            "title": "Maths study session 2",
+            "description": "",
+            "deadline": "2026-09-19T18:00:00+02:00",
+            "durationMinutes": 90,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "95bb5531-5021-4244-a41e-d19d2ea71626",
+            "parentID": null
+        },
+        {
+            "id": "685261c8-6285-467f-b0dd-2aa3328b4ddc",
+            "title": "Maths study session 3",
+            "description": "",
+            "deadline": "2026-09-20T08:00:00+02:00",
+            "durationMinutes": 90,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "95bb5531-5021-4244-a41e-d19d2ea71626",
             "parentID": null
         }
     ]

@@ -32,26 +32,23 @@ class TaskDraft(BaseModel):
 
 
 class OrganizeResult(BaseModel):
-    tasks: list[TaskDraft] = Field(min_length=1)
+    tasks: list[TaskDraft] = Field(default_factory=list)
+    message: str | None = None
 
 
-systemPrompt = f"""You extract actionable tasks from the user's message.
+systemPrompt = f"""Extract actionable tasks from the user's message.
 
-Current date and time: {currentDateTime.isoformat()}
-
-Use this date and time as the reference when interpreting relative dates such as:
-- today
-- tomorrow
-- this Friday
-- next Monday
+Reference time: {currentDateTime.isoformat()}
 
 Rules:
-- One user message may yield several tasks.
-- Use parentRef for subtasks/session rows.
-- durationMinutes: realistic focus blocks (e.g. 45–120), null if unknown.
-- priority: low | normal | high
-- deadline: ISO 8601 datetime when implied, else null.
-- If the user gives a relative deadline, resolve it using the current date and time above.
+- Actionable input → return one or more tasks.
+- No actionable intent or insufficient information → return tasks=[] and a brief helpful message.
+- Never invent tasks.
+- Preserve unknown fields as null or sensible defaults.
+- Resolve relative dates using the reference time.
+- deadline: ISO 8601 datetime or null.
+- durationMinutes: realistic estimate, usually 45–120, or null.
+- priority: low, normal, or high.
 """
 
 
@@ -98,8 +95,6 @@ def organizeWithLlm(rawText: str) -> OrganizeResult:
 
     result = OrganizeResult.model_validate(json.loads(content))
 
-    print("GROQ RESULT:", result)
-
     return result
 
 
@@ -138,6 +133,33 @@ def applyOrganizeResult(
                 parentID=None,
             )
         )
+    def reorganizeTasks(self, task, infoBox):
+        if not additionalInfo:
+            return
+
+        combinedText = (
+            f"Original task: {task.title}\n"
+            f"Existing description: {task.description}\n"
+            f"Additional information: {additionalInfo}"
+        )
+
+        result = organizer.organizeWithLlm(combinedText)
+
+        if not rsult.tasks:
+            self.refreshViewPanel (
+                result.message
+                or "I couldn't create an improved task proposal."
+            )
+            return
+        ingestion, newTasks = organizer.applyOrganizeResult(
+            result,
+            combinedText,
+        )
+        for newTasks in newTask:
+            self.taskManager.addTask(newTask)
+
+        self.taskManager.save()
+        self.displayTasks(newTasks)
 
     for draft, task in zip(result.tasks, built, strict=True):
         if not draft.parentRef:
