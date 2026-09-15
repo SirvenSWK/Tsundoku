@@ -5,6 +5,7 @@ import PySide6.QtWidgets as QtWidget
 class HomePage(QtWidget.QWidget):
     def __init__(self):
         super().__init__()
+        self.pendingIngestions = {}
         self.taskManager = taskManager.TaskManager()
         self.taskManager.load()
         self.inputBox = QtWidget.QPlainTextEdit()
@@ -48,12 +49,8 @@ class HomePage(QtWidget.QWidget):
         
         ingestion, newTasks = organizer.applyOrganizeResult(result, text)
 
-        self.taskManager.addIngestion(ingestion)
+        self.pendingIngestions[ingestion.id] = ingestion
 
-        for task in newTasks:
-            self.taskManager.addTask(task)
-
-        self.taskManager.save()
         self.displayTasks(newTasks)
         self.inputBox.clear()
 
@@ -112,11 +109,11 @@ class HomePage(QtWidget.QWidget):
 
         acceptButton = QtWidget.QPushButton("Accept")
         rejectButton = QtWidget.QPushButton("Reject")
-        addDetailbutton = QtWidget.QPushButton("Add details")
+        addDetailButton = QtWidget.QPushButton("Add details")
 
         buttonLayout.addWidget(acceptButton)
         buttonLayout.addWidget(rejectButton)
-        buttonLayout.addWidget(addDetailbutton)
+        buttonLayout.addWidget(addDetailButton)
 
         taskLayout.addLayout(buttonLayout)
 
@@ -134,14 +131,14 @@ class HomePage(QtWidget.QWidget):
         taskLayout.addWidget(additionalInfoBox)
         taskLayout.addWidget(reorganizeButton)
 
-        addDetailbutton.clicked.connect(
+        addDetailButton.clicked.connect(
             lambda: self.showAdditionalInfo(
                 additionalInfoBox,
                 reorganizeButton,
             )
         )
         reorganizeButton.clicked.connect(
-            lambda: self.reorganizeTasks(
+            lambda: self.reorganizeTask(
                 task,
                 additionalInfoBox,
             )
@@ -150,9 +147,9 @@ class HomePage(QtWidget.QWidget):
         rejectButton.clicked.connect(
             lambda: self.rejectTask(taskCard, task)
         )
-        #acceptButton.clicked.connect(
-            #lambda: self.acceptTask(taskCard, task)
-        #)
+        acceptButton.clicked.connect(
+            lambda: self.acceptTask(taskCard, task)
+        )
         return taskCard
 
     def showAdditionalInfo(self, infoBox, reorganizeButton):
@@ -160,7 +157,7 @@ class HomePage(QtWidget.QWidget):
         reorganizeButton.setVisible(True)
         infoBox.setFocus()
 
-    def reorganizeTasks(self, task, infoBox):
+    def reorganizeTask(self, task, infoBox):
 
         additionalInfo = infoBox.toPlainText().strip()
 
@@ -185,8 +182,31 @@ class HomePage(QtWidget.QWidget):
             result,
             combinedText,
         )
+
+        self.taskManager.addIngestion(ingestion)
+
         for newTask in newTasks:
             self.taskManager.addTask(newTask)
 
         self.taskManager.save()
         self.displayTasks(newTasks)
+
+    def rejectTask(self, taskCard, task):
+
+        self.pendingIngestions.pop(task.ingestionID, None)
+
+        self.reviewLayout.removeWidget(taskCard)
+        taskCard.deleteLater()
+
+    def acceptTask(self, taskCard, task):
+        ingestion = self.pendingIngestions.get(task.ingestionID)
+
+
+        if ingestion is not None:
+            self.taskManager.addIngestion(ingestion)
+
+        self.taskManager.addTask(task)
+        self.taskManager.save()
+
+        self.reviewLayout.removeWidget(taskCard)
+        taskCard.deleteLater()

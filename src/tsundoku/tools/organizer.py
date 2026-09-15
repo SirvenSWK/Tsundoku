@@ -10,16 +10,16 @@ from tsundoku.models.tasks import Ingestion, Task
 
 from dotenv import load_dotenv
 
+from tsundoku.models import settings
+
 import json
 
 currentDateTime = datetime.now().astimezone()
 load_dotenv()
-apiKey = os.getenv("GROQ_API_KEY")
+apiKey = settings.loadApi()
 
 
 class TaskDraft(BaseModel):
-    """One unit of work the scheduler can place on the calendar."""
-
     title: str
     description: str = ""
     deadline: datetime | None = None
@@ -53,7 +53,7 @@ Rules:
 
 
 def fallbackOrganize(rawText: str) -> OrganizeResult:
-    apiKey = os.getenv("GROQ_API_KEY")
+    apiKey = settings.loadApi()
     return OrganizeResult(
         tasks=[
             TaskDraft(
@@ -67,26 +67,34 @@ def fallbackOrganize(rawText: str) -> OrganizeResult:
 def organizeWithLlm(rawText: str) -> OrganizeResult:
 
     if not apiKey:
-        return fallbackOrganize(rawText)
+        return OrganizeResult(
+            task=[],
+            message="Add your Groq API key from https://console.groq.com/keys in settings to use AI organization"
+        )
 
     from groq import Groq
 
     client = Groq(api_key = apiKey)
-
-    completion = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
-        messages=[
-            {"role": "system","content": systemPrompt},
-            {"role": "user", "content": rawText},
-        ],
-        response_format={
-            "type": "json_schema",
-            "json_schema": {
-                "name": "organize_result",
-                "schema": OrganizeResult.model_json_schema(),
+    try:
+        completion = client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[
+                {"role": "system","content": systemPrompt},
+                {"role": "user", "content": rawText},
+            ],
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "organize_result",
+                    "schema": OrganizeResult.model_json_schema(),
+                },
             },
-        },
-    )
+        )
+    except:
+        return OrganizeResult(
+            task=[],
+            messgae="There was a problem connecting to Groq. Check your API key and try again."
+        )
 
     content = completion.choices[0].message.content
 
@@ -133,33 +141,6 @@ def applyOrganizeResult(
                 parentID=None,
             )
         )
-    def reorganizeTasks(self, task, infoBox):
-        if not additionalInfo:
-            return
-
-        combinedText = (
-            f"Original task: {task.title}\n"
-            f"Existing description: {task.description}\n"
-            f"Additional information: {additionalInfo}"
-        )
-
-        result = organizer.organizeWithLlm(combinedText)
-
-        if not rsult.tasks:
-            self.refreshViewPanel (
-                result.message
-                or "I couldn't create an improved task proposal."
-            )
-            return
-        ingestion, newTasks = organizer.applyOrganizeResult(
-            result,
-            combinedText,
-        )
-        for newTasks in newTask:
-            self.taskManager.addTask(newTask)
-
-        self.taskManager.save()
-        self.displayTasks(newTasks)
 
     for draft, task in zip(result.tasks, built, strict=True):
         if not draft.parentRef:

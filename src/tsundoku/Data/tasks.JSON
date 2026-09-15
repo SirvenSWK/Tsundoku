@@ -45,6 +45,41 @@
             "id": "95bb5531-5021-4244-a41e-d19d2ea71626",
             "rawText": "I have a maths test next week on a tuesday i need help scheduling a few study sessions in my timetable",
             "timeStamp": "2026-09-14T22:21:47.628187+02:00"
+        },
+        {
+            "id": "be1ba301-4ae1-4550-ac74-0bb43b65db38",
+            "rawText": "Hello i need to study for a test next week",
+            "timeStamp": "2026-09-15T20:54:25.224597+02:00"
+        },
+        {
+            "id": "5fcfd13d-d39c-4e54-9ca5-12c3125baaf0",
+            "rawText": "Original task: Study for test\nExisting description: Prepare for upcoming test\nAdditional information: It will be a maths test and i need help with sorting detailed study sessions",
+            "timeStamp": "2026-09-15T20:54:56.985806+02:00"
+        },
+        {
+            "id": "2204644e-c3ea-4b01-aaea-c52e18edb146",
+            "rawText": "Original task: Study maths\nExisting description: \nAdditional information: Make this into study sessions",
+            "timeStamp": "2026-09-15T21:10:16.005790+02:00"
+        },
+        {
+            "id": "3b908c2c-df0e-414e-a3b4-8c375a211226",
+            "rawText": "Original task: Study maths\nExisting description: \nAdditional information: Make this into study sessions",
+            "timeStamp": "2026-09-15T21:10:44.835225+02:00"
+        },
+        {
+            "id": "c87dd22c-c740-4f9a-ae92-07d6519c6b04",
+            "rawText": "Original task: Buy calculator\nExisting description: \nAdditional information: Make this into study sessions",
+            "timeStamp": "2026-09-15T21:11:04.167872+02:00"
+        },
+        {
+            "id": "5009ed12-3560-47c2-85f3-8f33d4ae5410",
+            "rawText": "I need to milk a cow",
+            "timeStamp": "2026-09-15T21:11:18.032282+02:00"
+        },
+        {
+            "id": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "rawText": "Original task: Set reminder for maths test\nExisting description: Create a reminder for the upcoming maths test\nAdditional information: I need to make it into a few sessions the test is about funkcja wykladnicza",
+            "timeStamp": "2026-09-15T21:48:11.367075+02:00"
         }
     ],
     "tasks": [
@@ -256,6 +291,182 @@
             "completed": false,
             "ingestionID": "95bb5531-5021-4244-a41e-d19d2ea71626",
             "parentID": null
+        },
+        {
+            "id": "fbef83bc-d5a2-4604-a152-9569309bac0b",
+            "title": "Study for test",
+            "description": "Prepare for upcoming test",
+            "deadline": "2026-09-22T20:54:08.690359+02:00",
+            "durationMinutes": 120,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "be1ba301-4ae1-4550-ac74-0bb43b65db38",
+            "parentID": null
+        },
+        {
+            "id": "60c440f0-9dc5-4377-be0a-63e1999518bd",
+            "title": "Create detailed study schedule",
+            "description": "Prepare a detailed study plan for the maths test, sorting sessions by topic and difficulty.",
+            "deadline": null,
+            "durationMinutes": 90,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "5fcfd13d-d39c-4e54-9ca5-12c3125baaf0",
+            "parentID": null
+        },
+        {
+            "id": "96d547f8-8825-4568-bef9-041755755b12",
+            "title": "Review algebra concepts",
+            "description": "Study algebra topics needed for the test.",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "5fcfd13d-d39c-4e54-9ca5-12c3125baaf0",
+            "parentID": null
+        },
+        {
+            "id": "2757fb86-a76a-464b-931a-f6eab8448c4c",
+            "title": "Practice geometry problems",
+            "description": "Solve geometry exercises to reinforce understanding.",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "5fcfd13d-d39c-4e54-9ca5-12c3125baaf0",
+            "parentID": null
+        },
+        {
+            "id": "7d26941b-e355-4553-a1bb-8c36999f60be",
+            "title": "Take a practice maths test",
+            "description": "Simulate test conditions with a practice exam.",
+            "deadline": null,
+            "durationMinutes": 120,
+            "priority": "high",
+            "completed": false,
+            "ingestionID": "5fcfd13d-d39c-4e54-9ca5-12c3125baaf0",
+            "parentID": null
+        },
+        {
+            "id": "b1efaa91-5121-4ab0-ad8d-0603591d2652",
+            "title": "Study maths",
+            "description": "",
+            "deadline": null,
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "2204644e-c3ea-4b01-aaea-c52e18edb146",
+            "parentID": null
+        },
+        {
+            "id": "fe252389-b6dd-43f5-8907-abc496e4b66d",
+            "title": "Study maths - Session",
+            "description": "",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "3b908c2c-df0e-414e-a3b4-8c375a211226",
+            "parentID": null
+        },
+        {
+            "id": "88d2e850-fbc7-4feb-8fa6-84aa7d247947",
+            "title": "Buy calculator",
+            "description": "Make this into study sessions",
+            "deadline": null,
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "c87dd22c-c740-4f9a-ae92-07d6519c6b04",
+            "parentID": null
+        },
+        {
+            "id": "d1704dab-3a2d-4a68-a93e-91706ba9aa56",
+            "title": "Milk a cow",
+            "description": "",
+            "deadline": null,
+            "durationMinutes": 45,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "5009ed12-3560-47c2-85f3-8f33d4ae5410",
+            "parentID": null
+        },
+        {
+            "id": "40fb10c1-263a-47c5-a52e-62e6e2fac633",
+            "title": "Set reminder for maths test",
+            "description": "Create a reminder for the upcoming maths test",
+            "deadline": null,
+            "durationMinutes": null,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": null
+        },
+        {
+            "id": "b37097ef-062f-4fb0-b959-d4df928112f5",
+            "title": "Study session 1: exponential function",
+            "description": "Review the exponential function topics for the maths test",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": "40fb10c1-263a-47c5-a52e-62e6e2fac633"
+        },
+        {
+            "id": "4e95b0ae-b621-43fe-91c4-7901cbe057f3",
+            "title": "Study session 2: exponential function practice",
+            "description": "Solve practice problems on exponential functions",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": "40fb10c1-263a-47c5-a52e-62e6e2fac633"
+        },
+        {
+            "id": "b1750350-8495-466d-881c-b70de0ae8e32",
+            "title": "Study session 3: review and summarize",
+            "description": "Summarize key concepts of exponential functions and review notes",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": "40fb10c1-263a-47c5-a52e-62e6e2fac633"
+        },
+        {
+            "id": "b37097ef-062f-4fb0-b959-d4df928112f5",
+            "title": "Study session 1: exponential function",
+            "description": "Review the exponential function topics for the maths test",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": "40fb10c1-263a-47c5-a52e-62e6e2fac633"
+        },
+        {
+            "id": "4e95b0ae-b621-43fe-91c4-7901cbe057f3",
+            "title": "Study session 2: exponential function practice",
+            "description": "Solve practice problems on exponential functions",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": "40fb10c1-263a-47c5-a52e-62e6e2fac633"
+        },
+        {
+            "id": "b1750350-8495-466d-881c-b70de0ae8e32",
+            "title": "Study session 3: review and summarize",
+            "description": "Summarize key concepts of exponential functions and review notes",
+            "deadline": null,
+            "durationMinutes": 60,
+            "priority": "normal",
+            "completed": false,
+            "ingestionID": "278faa72-150b-4157-be8f-a4fe8e0308bc",
+            "parentID": "40fb10c1-263a-47c5-a52e-62e6e2fac633"
         }
     ]
 }
