@@ -47,9 +47,7 @@ Rules:
 - priority: low, normal, or high.
 """
 
-
 def fallbackOrganize(rawText: str) -> OrganizeResult:
-    apiKey = settings.loadApi()
     return OrganizeResult(
         tasks=[
             TaskDraft(
@@ -59,25 +57,23 @@ def fallbackOrganize(rawText: str) -> OrganizeResult:
         ]
     )
 
+def organizeWithLlm(rawText: str, client=None) -> OrganizeResult:
+    if client is None:
+        apiKey = settings.loadApi()
 
-def organizeWithLlm(rawText: str) -> OrganizeResult:
+        if not apiKey:
+            return OrganizeResult(
+                tasks=[],
+                message="Add your Groq API key in settings to use AI organization."
+            )
 
-    apiKey = settings.loadApi()
+        client = Groq(api_key=apiKey)
 
-    if not apiKey:
-        return OrganizeResult(
-            tasks=[],
-            message="Add your Groq API key from https://console.groq.com/keys in settings to use AI organization"
-        )
-
-    from groq import Groq
-
-    client = Groq(api_key = apiKey)
     try:
         completion = client.chat.completions.create(
             model="openai/gpt-oss-120b",
             messages=[
-                {"role": "system","content": systemPrompt},
+                {"role": "system", "content": systemPrompt},
                 {"role": "user", "content": rawText},
             ],
             response_format={
@@ -99,11 +95,7 @@ def organizeWithLlm(rawText: str) -> OrganizeResult:
     if not content:
         return fallbackOrganize(rawText)
 
-    result = OrganizeResult.model_validate(json.loads(content))
-
-    return result
-
-
+    return OrganizeResult.model_validate(json.loads(content))
 def applyOrganizeResult(
     result: OrganizeResult,
     rawText: str,
