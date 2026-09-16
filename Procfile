@@ -1,0 +1,1 @@
+web: gunicorn --chdir src tsundoku.webMain:app

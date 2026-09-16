@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 
@@ -8,16 +7,13 @@ from pydantic import BaseModel, Field
 
 from tsundoku.models.tasks import Ingestion, Task
 
-from dotenv import load_dotenv
-
 from tsundoku.models import settings
 
 import json
 
-currentDateTime = datetime.now().astimezone()
-load_dotenv()
-apiKey = settings.loadApi()
+from groq import Groq, AuthenticationError
 
+currentDateTime = datetime.now().astimezone()
 
 class TaskDraft(BaseModel):
     title: str
@@ -66,9 +62,11 @@ def fallbackOrganize(rawText: str) -> OrganizeResult:
 
 def organizeWithLlm(rawText: str) -> OrganizeResult:
 
+    apiKey = settings.loadApi()
+
     if not apiKey:
         return OrganizeResult(
-            task=[],
+            tasks=[],
             message="Add your Groq API key from https://console.groq.com/keys in settings to use AI organization"
         )
 
@@ -90,10 +88,10 @@ def organizeWithLlm(rawText: str) -> OrganizeResult:
                 },
             },
         )
-    except:
+    except AuthenticationError:
         return OrganizeResult(
-            task=[],
-            messgae="There was a problem connecting to Groq. Check your API key and try again."
+            tasks=[],
+            message="There was a problem connecting to Groq. Check your API key and try again."
         )
 
     content = completion.choices[0].message.content
