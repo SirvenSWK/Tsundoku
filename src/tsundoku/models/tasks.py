@@ -32,12 +32,14 @@ class Task:
     id: UUID
     title: str
     description: str
+    scheduledStart: datetime | None
     deadline: datetime | None
     duration: timedelta | None
     priority: str
     completed: bool
     parentID: UUID | None = None
     ingestionID: UUID | None = None
+    isAllDay: bool = False
 
     def toRecord(self) -> TaskRecord:
         durationMinutes = None
@@ -47,12 +49,14 @@ class Task:
             id=self.id,
             title=self.title,
             description=self.description,
+            scheduledStart=self.scheduledStart,
             deadline=self.deadline,
             durationMinutes=durationMinutes,
             priority=self.priority,
             completed=self.completed,
             ingestionID=self.ingestionID,
             parentID=self.parentID,
+            isAllDay=self.isAllDay,
         )
 
     @classmethod
@@ -61,13 +65,15 @@ class Task:
         if record.durationMinutes is not None:
             duration = timedelta(minutes=record.durationMinutes)
         return cls(
-            id=record.id,
-            title=record.title,
-            description=record.description,
-            deadline=record.deadline,
-            duration=duration,
-            priority=record.priority,
-            completed=record.completed,
-            ingestionID=record.ingestionID,
-            parentID=record.parentID,
-        )
+        id=record.id,
+        title=record.title,
+        description=record.description,
+        scheduledStart=record.scheduledStart,
+        deadline=record.deadline,
+        duration=duration,
+        priority=record.priority,
+        completed=record.completed,
+        ingestionID=record.ingestionID,
+        parentID=record.parentID,
+        isAllDay=record.isAllDay,
+    )

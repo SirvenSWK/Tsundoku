@@ -18,6 +18,8 @@ currentDateTime = datetime.now().astimezone()
 class TaskDraft(BaseModel):
     title: str
     description: str = ""
+    scheduledStart: datetime |None = None
+    isAllDay: bool = False
     deadline: datetime | None = None
     durationMinutes: int | None = Field(default=None, ge=1)
     priority: str = "normal"
@@ -45,6 +47,18 @@ Rules:
 - deadline: ISO 8601 datetime or null.
 - durationMinutes: realistic estimate, usually 45–120, or null.
 - priority: low, normal, or high.
+For each task:
+- scheduledStart is the intended start date and time for doing the task.
+- deadline is the latest date and time by which the task should be completed.
+- If the user explicitly gives a time for doing the task, put it in scheduledStart.
+- Do not put an explicit task start time into deadline.
+- Only use deadline when the user expresses a deadline, due date, or latest completion time.
+- If neither is specified, use null.
+For scheduledStart and isAllDay:
+- If the user gives a specific date AND time, set scheduledStart to that datetime and isAllDay to false.
+- If the user gives a date but NO time, set scheduledStart to that date at midnight and isAllDay to true.
+- If the user gives no date, set scheduledStart to null and isAllDay to false.
+- isAllDay means the task should appear as a full-day calendar item.
 """
 
 def fallbackOrganize(rawText: str) -> OrganizeResult:
@@ -123,12 +137,14 @@ def applyOrganizeResult(
                 id=taskId,
                 title=draft.title,
                 description=draft.description,
+                scheduledStart=draft.scheduledStart,
                 deadline=draft.deadline,
                 duration=duration,
                 priority=draft.priority,
                 completed=False,
                 ingestionID=ingestion.id,
                 parentID=None,
+                isAllDay=draft.isAllDay,
             )
         )
 

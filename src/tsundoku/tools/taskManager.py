@@ -50,3 +50,5 @@ class TaskManager:
         doc = TaskStoreDocument.model_validate(data)
         self.ingestions = [Ingestion.fromRecord(r) for r in doc.ingestions]
         self.tasks = [Task.fromRecord(r) for r in doc.tasks]
+
+taskManager = TaskManager()

@@ -15,13 +15,15 @@ class IngestionRecord(BaseModel):
 class TaskRecord(BaseModel):
     id: UUID
     title: str
-    description: str = ""
+    description: str
+    scheduledStart: datetime | None = None
     deadline: datetime | None = None
     durationMinutes: int | None = None
-    priority: str = "normal"
-    completed: bool = False
+    priority: str
+    completed: bool
     ingestionID: UUID | None = None
     parentID: UUID | None = None
+    isAllDay: bool = False
 
 
 class TaskStoreDocument(BaseModel):

@@ -1,4 +1,5 @@
-from tsundoku.tools import organizer, taskManager
+from tsundoku.tools import organizer
+from tsundoku.tools.taskManager import taskManager
 import PySide6.QtWidgets as QtWidget
 
 
@@ -6,7 +7,7 @@ class HomePage(QtWidget.QWidget):
     def __init__(self):
         super().__init__()
         self.pendingIngestions = {}
-        self.taskManager = taskManager.TaskManager()
+        self.taskManager = taskManager
         self.taskManager.load()
         self.inputBox = QtWidget.QPlainTextEdit()
         self.inputBox.setPlaceholderText(
@@ -89,12 +90,12 @@ class HomePage(QtWidget.QWidget):
         priorityLabel = QtWidget.QLabel(
             f"Priority {task.priority}"
         )
-        durationText = (
-            str(task.duration)
-            if task.duration is not None
-            else "Not specified"
+        scheduledText = (
+            str(task.scheduledStart.strftime("%Y-%m-%d %H:%M"))
+            if task.scheduledStart is not None
+            else "Starting time not specified"
         )
-        durationLabel = QtWidget.QLabel(durationText)
+        scheduledLabel = QtWidget.QLabel(scheduledText)
         taskLayout.addWidget(titleLabel)
 
         if task.description:
@@ -103,7 +104,7 @@ class HomePage(QtWidget.QWidget):
             taskLayout.addWidget(descriptionLabel)
 
         taskLayout.addWidget(priorityLabel)
-        taskLayout.addWidget(durationLabel)
+        taskLayout.addWidget(scheduledLabel)
 
         buttonLayout = QtWidget.QHBoxLayout()
 
