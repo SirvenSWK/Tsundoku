@@ -76,9 +76,17 @@ function positiveLimit(name: string, fallback: number): number {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
+function redisRestUrl(): string {
+  return getStringEnv("UPSTASH_REDIS_REST_URL") || getStringEnv("KV_REST_API_URL");
+}
+
+function redisRestToken(): string {
+  return getStringEnv("UPSTASH_REDIS_REST_TOKEN") || getStringEnv("KV_REST_API_TOKEN");
+}
+
 async function redisCommand(command: string, ...args: string[]): Promise<number> {
-  const redisUrl = getStringEnv("UPSTASH_REDIS_REST_URL").replace(/\/+$/, "");
-  const redisToken = getStringEnv("UPSTASH_REDIS_REST_TOKEN");
+  const redisUrl = redisRestUrl().replace(/\/+$/, "");
+  const redisToken = redisRestToken();
   if (!redisUrl || !redisToken) throw new Error("Rate limit storage is not configured");
 
   const path = [command, ...args].map(encodeURIComponent).join("/");
@@ -121,8 +129,12 @@ export default async function handler(request: RequestLike, response: ResponseLi
   }
 
   const groqKey = getStringEnv("GROQ_API_KEY");
-  if (!groqKey || !getStringEnv("UPSTASH_REDIS_REST_URL") || !getStringEnv("UPSTASH_REDIS_REST_TOKEN")) {
-    sendError(response, 503, "The demo organizer is not configured yet.");
+  if (!groqKey) {
+    sendError(response, 503, "The demo organizer needs GROQ_API_KEY in its Vercel environment.");
+    return;
+  }
+  if (!redisRestUrl() || !redisRestToken()) {
+    sendError(response, 503, "The demo organizer needs its Redis usage-limit connection configured.");
     return;
   }
 

@@ -23,8 +23,7 @@ The desktop app calls a Vercel function at `api/organize.ts`. That function call
 4. In Vercel project settings, add these Environment Variables for Production:
 
    - `GROQ_API_KEY` — the maintainer's Groq key
-   - `UPSTASH_REDIS_REST_URL` — the Upstash REST URL
-   - `UPSTASH_REDIS_REST_TOKEN` — the Upstash REST token
+   - `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` — Upstash REST credentials; Vercel KV's `KV_REST_API_URL` and write-enabled `KV_REST_API_TOKEN` are also accepted.
 
    Optional limit variables default to 10 requests per IP per day, 100 total requests per UTC day, 3,000 characters per note, and 1,000 generated tokens per request: `DEMO_IP_DAILY_LIMIT`, `DEMO_GLOBAL_DAILY_LIMIT`, `DEMO_MAX_INPUT_CHARS`, and `DEMO_MAX_OUTPUT_TOKENS`.
 5. Redeploy after adding the variables. The endpoint will be `https://<your-vercel-project>.vercel.app/api/organize`.
