@@ -5,3 +5,4 @@ __pycache__/
 .vscode/
 .idea/
 src/tsundoku/Data/settings.json
+src/tsundoku/Data/google_oauth_client.json

@@ -3,10 +3,7 @@ import tsundoku.ui.calendarWindow as calendarWindow
 import tsundoku.ui.settingsWindow as settingsWindow
 
 from PySide6.QtWidgets import (
-    QApplication,
     QHBoxLayout,
-    QLabel,
-    QListWidget,
     QMainWindow,
     QPushButton,
     QPlainTextEdit,
@@ -59,9 +56,12 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(centralWidget)
 
     def changeToHome(self):
+        self.homePage.refreshSetupPrompt()
         self.pages.setCurrentIndex(0)
 
     def changeToCalendar(self):
+        self.calendarPage.refreshCalendar()
         self.pages.setCurrentIndex(1)
+
     def changeToSettings(self):
         self.pages.setCurrentIndex(2)

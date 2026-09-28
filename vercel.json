@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/organize.ts": {
+      "maxDuration": 30
+    }
+  }
+}

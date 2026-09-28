@@ -1,5 +1,4 @@
-from tsundoku.main import runApp
-
-
 def main() -> None:
+    from tsundoku.main import runApp
+
     runApp()
