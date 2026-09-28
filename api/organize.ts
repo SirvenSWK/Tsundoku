@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+declare const process: { env: Record<string, string | undefined> };
 
 type RequestLike = {
   method?: string;
@@ -113,7 +113,16 @@ function getClientIp(request: RequestLike): string | null {
   const forwarded = Array.isArray(raw) ? raw[0] : raw;
   if (!forwarded) return null;
   // Vercel appends the connecting client address to this proxy header.
-  return forwarded.split(",").map((value) => value.trim()).filter(Boolean).at(-1) || null;
+  const addresses = forwarded.split(",").map((value) => value.trim()).filter(Boolean);
+  return addresses.length ? addresses[addresses.length - 1] : null;
+}
+
+async function hashClientIp(ip: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip));
+  return Array.from(new Uint8Array(digest))
+    .map((value) => value.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 24);
 }
 
 function sendError(response: ResponseLike, status: number, error: string): void {
@@ -157,8 +166,8 @@ export default async function handler(request: RequestLike, response: ResponseLi
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 24);
   try {
+    const ipHash = await hashClientIp(ip);
     const ipCount = await incrementDaily(`tsundoku:ip:${today}:${ipHash}`);
     if (ipCount > positiveLimit("DEMO_IP_DAILY_LIMIT", 10)) {
       sendError(response, 429, "You've reached today's demo limit. Please try again tomorrow.");
